@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Popular Grocery Items</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    * {
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family: Arial, sans-serif;
+    }
+    body {
+      background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-fqmOPe3OiTlnYbpmwCkPA7Rvx1VMSAA4EA&s');
+      background-size: cover;
+      background-position: center; 
+      background-attachment: fixed;
+      display:flex;
+      flex-direction:column;
+      min-height:100vh;
+    }
+    header {
+      background-color:green;
+      color:white; 
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding: 15px 30px;
+    }
+    .logo {
+      font-weight: bold;
+      font-size: 25px;
+    }
+    nav ul {
+      list-style:none; 
+      display:flex;
+      gap: 20px;
+    }
+    nav ul li { 
+      position: relative;
+    }
+    nav ul li a { 
+      color:white; 
+      text-decoration: none; 
+      font-weight: 400;
+      position: relative;
+    } 
+    nav ul li a:hover {
+      color:#ffeb3b;
+    }
+    .badge {
+      position: absolute; 
+      top: -8px;
+      right: -12px;
+      background: red; 
+      color: white; 
+      font-size: 12px;
+      font-weight: bold;
+      padding: 2px 6px; 
+      border-radius: 50%;
+    } 
+    main { 
+      flex:1; 
+      padding:30px;
+      background: rgba(205, 170, 170, 0.8);
+      text-align: center; /* centers the inner content */
+    }
+    main h1 { 
+      margin-bottom:15px;
+      color:blue;
+    }
+    main p {
+      color:#333;
+    }
+    footer {
+      background-color: green;
+      color:white; 
+      text-align: center;
+      padding:10px;
+    }
+
+    /* 🔎 Search bar styling */
+    .search-container {
+      position: relative;
+      width: 400px; /* smaller width */
+      margin: 20px auto; /* keeps it centered */
+    }
+    #searchBar {
+      width: 100%;
+      padding: 10px 40px; /* space for icon */
+      border-radius: 20px;
+      border: 2px solid #4CAF50;
+      font-size: 14px;
+      outline: none;
+    }
+    #searchBar:focus {
+      border-color: #2e7d32;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    .search-icon {
+      position: absolute;
+      top: 50%;
+      left: 12px;
+      transform: translateY(-50%);
+      color: #4CAF50;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Groceries</div>
+    <nav>
+      <ul>
+        <li><a href="groceries home.html">Home</a></li>
+        <li><a href="shopping list.html">Shopping List</a></li>
+        <li><a href="items.html">Item Details</a></li>
+        <li><a href="search.html">Search</a></li>
+        <li><a href="favourites.html">Favourites</a></li>
+        <li>
+          <a href="notification.html">Notifications 
+            <span class="badge" id="notifCount">1</span>
+          </a>
+        </li>
+        <li><a href="user profile.html">User Profile</a></li>
+        <li><a href="help & support.html">Help & Support</a></li>
+        <li><a href="rating.html">Rating</a></li>
+      </ul>
+    </nav>
+  </header>
+  
+  <main>
+    <h1>Welcome to Groceries Application</h1>
+    <p>Select menu options from the top navigation to get started with your shopping experience.</p>
+    
+    <!-- 🔎 Centered Search Bar -->
+    <div class="search-container">
+      <i class="fa fa-search search-icon"></i>
+      <input 
+        type="text" 
+        id="searchBar" 
+        placeholder="Search by fruits, vegetables, groceries..."
+        autocomplete="off">
+    </div>
+  </main>
+  
+  <footer>
+    @ Groceries app 2025
+  </footer>
+  
+  <script>
+    let notifCount = document.getElementById("notifCount");
+    let count = parseInt(notifCount.textContent);
+    setInterval(() => {
+      count++;
+      notifCount.textContent = count;
+    }, 30000);
+  </script>
+</body>
+</html>
