@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Groceries Notifications</title>
+  <style>
+    body {
+      background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQxNNcoXvEr5IbfRL4wsSs0Xaz6XK_zjK3bA&s');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .notification-box {
+      width: 340px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    .notification-header {
+      background: #1d0892;
+      color: white;
+      padding: 12px;
+      text-align: center;
+      font-size: 18px;
+      position: relative;
+    }
+    .badge {
+      position: absolute;
+      top: 8px;
+      right: 15px;
+      background: red;
+      color: white;
+      font-size: 12px;
+      font-weight: bold;
+      padding: 2px 6px;
+      border-radius: 50%;
+    }
+
+    .notification-list {
+      max-height: 350px;
+      overflow-y: auto;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    .notification-item {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      font-size: 14px;
+    }
+
+    .notification-item:nth-child(even) {
+      background: #f9f9f9;
+    }
+    .home-btn {
+  display: inline-block;
+  font-size: 20px;
+  text-decoration: none;
+  color: white;
+  background: #007bff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+.home-btn:hover {
+  background: #0056b3;
+}
+  </style>
+</head>
+<body>
+   <a href="groceries home.html" class="home-btn">🏠</a>
+  <div class="notification-box">
+    <div class="notification-header">
+      Groceries Notifications
+      <span class="badge" id="notifCount">0</span>
+    </div>
+    <ul class="notification-list" id="notificationList"></ul>
+  </div>
+
+  <script>
+    const notificationList = document.getElementById("notificationList");
+    const notifCountEl = document.getElementById("notifCount");
+
+    let notifCount = 0;
+
+    const groceryOrders = [
+      "📦 Your grocery order is confirmed!",
+      "🚚 Your order is on the way – track it now!",
+      "🎉 Your order has been delivered. Enjoy your fresh groceries!",
+      "🥛 Fresh milk is back in stock – grab it before it’s gone!",
+      "🍌 Bananas are selling fast – add them now!",
+      "🥚 Eggs just arrived – limited stock available.",
+      "🍅 Tomatoes are fresh in store today.",
+      "🔥 20% OFF on fresh fruits today only!",
+      "🎁 Buy 1 Get 1 FREE on bread this week!",
+      "💸 Save ₹100 on your first grocery order.",
+      "🍎 Healthy Offer: Apples at ₹99/kg today.",
+      "👋 Hello, your favorites are waiting in the cart!",
+      "✨ Special for you: Discounts on items you love.",
+      "🌿 Fresh arrivals picked just for you.",
+      "🚀 Fast delivery available in your area today!"
+    ];
+
+    function addNotification() {
+      const li = document.createElement("li");
+      li.className = "notification-item";
+      li.textContent = groceryOrders[Math.floor(Math.random() * groceryOrders.length)];
+      notificationList.prepend(li);
+
+      notifCount++;
+      notifCountEl.textContent = notifCount;
+    }
+
+    
+    addNotification();
+
+    
+    setInterval(addNotification, 30000);
+  </script>
+</body>
+</html>

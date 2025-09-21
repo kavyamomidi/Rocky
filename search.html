@@ -1,0 +1,62 @@
+<!-- 🔎 Compact Search Bar with Icon -->
+<div class="search-container">
+  <i class="fa fa-search search-icon"></i>
+  <input 
+    type="text" 
+    id="searchBar" 
+    placeholder="Search by fruits,vegetables,groceries......."
+    autocomplete="off">
+</div>
+
+
+
+<!-- Font Awesome for search icon -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+  .search-container {
+    position: relative;
+    width: 500px;   /* 🔹 reduced size */
+    margin: 20px auto;
+  }
+
+  #searchBar {
+    width: 100%;
+    padding: 8px 35px 8px 35px; /* space for icon */
+    border-radius: 20px;
+    border: 2px solid #4CAF50;
+    font-size: 14px; /* smaller font */
+    outline: none;
+  }
+
+  #searchBar:focus {
+    border-color: #2e7d32;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  }
+
+  .search-icon {
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    transform: translateY(-50%);
+    color: #4CAF50;
+    font-size: 14px;
+  }
+</style>
+
+<script>
+  const items = ["Apple", "Banana", "Milk", "Rice", "Tomato", "Onion", "Bread"];
+  let index = 0;
+  const searchBar = document.getElementById("searchBar");
+  const cards = document.querySelectorAll("#groceryGrid .card");
+
+ 
+  // 🔎 live filtering
+  searchBar.addEventListener("keyup", function () {
+    const query = searchBar.value.toLowerCase();
+    cards.forEach(card => {
+      const name = card.querySelector("h3").textContent.toLowerCase();
+      card.style.display = name.includes(query) ? "block" : "none";
+    });
+  });
+</script>

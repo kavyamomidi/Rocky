@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopping List</title>
+  <style>
+    body {
+      background-image:url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvWd3U83a6D83aj-TxhK-CKy0NKmmFda5nrQ&s');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #2534a2;
+      color: #fff;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .cart-icon {
+      position: relative;
+      cursor: pointer;
+      font-size: 40px;
+    }
+    .cart-icon span {
+      background: red;
+      color: white;
+      border-radius: 100%;
+      padding: 2px 7px;
+      font-size: 14px;
+      position: absolute;
+      top: -10px;
+      right: -10px;
+    }
+    #cartModal {
+      display: none;
+      position: fixed;
+      right: 0;
+      top: 0;
+      width: 500px;
+      height: 100%;
+      background: #fff;
+      box-shadow: -2px 0 8px rgba(0,0,0,0.2);
+      padding: 20px;
+      overflow-y: auto;
+    }
+    #cartModal h2 { margin-bottom: 15px; }
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 8px;
+    }
+    .cart-total {
+      font-weight: bold;
+      margin-top: 15px;
+    }
+    .close-btn {
+      background: red;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+      float: right;
+    }
+     .container {
+      max-width: 1500px;
+      margin: auto;
+      padding: 10px 10px;
+    }
+
+    h2 {
+      font-size: 28px;
+      margin: 20px 0;
+      text-align: left;
+      color:#222;
+    }
+    
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(220px, 1fr));
+      gap:30px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      overflow: hidden;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      padding: 10px;
+      position: relative; 
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+    }
+
+    .card img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+    }
+
+    .card h3 {
+      font-size: 18px;
+      margin: 15px 0 5px;
+    }
+
+    .card p {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .btn, .quantity-controls {
+      display: inline-block;
+      margin-top: 8px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      background: #2c2292;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .btn:hover {
+      background: #218838;
+    }
+
+    .quantity-controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .quantity-controls button {
+      padding: 5px 12px;
+      border: none;
+      border-radius: 6px;
+      background: #2c2292;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .quantity-controls button:hover {
+      background: #218838;
+    }
+
+    .quantity-controls span {
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .heart {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 22px;
+      cursor: pointer;
+      color: #bbb;
+      transition: color 0.3s;
+      user-select: none;
+    }
+    .heart.active {
+      color: red;
+    }
+    .home-btn {
+  display: inline-block;
+  font-size: 20px;
+  text-decoration: none;
+  color: white;
+  background: #007bff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+.home-btn:hover {
+  background: #0056b3;
+}
+  </style>
+</head>
+<body>
+   <header>
+    <h1>Groceries Shopping List</h1>
+    <div class="cart-icon" onclick="toggleCart()">
+      🛒 <span id="cartCount">0</span>
+    </div>
+  </header>
+
+  <div id="cartModal">
+    <button class="close-btn" onclick="toggleCart()">X</button>
+    <h2>Your Cart</h2>
+    <div id="cartItems"></div>
+    <p class="cart-total">Total: Rs.<span id="cartTotal">0.00</span></p>
+  </div>
+  <a href="groceries home.html" class="home-btn">🏠</a>
+
+  <div class="container">
+
+    <!-- Fruits Section -->
+    <h2> Fruits</h2>
+    <div class="grid">
+      <div class="card">
+        <span class="heart">&#9829;</span>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHXDW9PFwYGQcHZs0rFYYKKF76un14axIhgw&s.jpg">
+        <h3>Apples</h3>
+        <p>135 Rs./kg</p>
+        <a href="#" class="btn add-to-cart">Add to Cart</a>
+        <div class="quantity-controls" style="display:none;">
+          <button class="minus">−</button>
+          <span class="quantity">1</span>
+          <button class="plus">+</button></div></div>
+      <div class="card">
+        <span class="heart">&#9829;</span>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3IDOF05TptyUKJEXPh-c4RGMJqf9H9XozuQ&s.jpg">
+        <h3>Bananas</h3>
+        <p>34 Rs./kg</p>
+        <a href="#" class="btn add-to-cart">Add to Cart</a>
+        <div class="quantity-controls" style="display:none;">
+          <button class="minus">−</button>
+          <span class="quantity">1</span>
+          <button class="plus">+</button></div></div>
+      <div class="card">
+        <span class="heart">&#9829;</span>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSc7KtEXTfNb1PVNMz7iRboY7w3gPkLqgaFVg&s.jpg">
+        <h3>Mangoes</h3>
+        <p>90 Rs./kg</p>
+        <a href="#" class="btn add-to-cart">Add to Cart</a>
+        <div class="quantity-controls" style="display:none;">
+          <button class="minus">−</button>
+          <span class="quantity">1</span>
+          <button class="plus">+</button></div></div>
+      <div class="card">
+        <span class="heart">&#9829;</span>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrDMSNv6gwLAJau6LEd0SYo4V7qxYD5pylmw&s.jpg">
+        <h3>Oranges</h3>
+        <p>70 Rs./kg</p>
+        <a href="#" class="btn add-to-cart">Add to Cart</a>
+        <div class="quantity-controls" style="display:none;">
+          <button class="minus">−</button>
+          <span class="quantity">1</span>
+          <button class="plus">+</button></div></div>
+      <div class="card">
+        <span class="heart">&#9829;</span>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4ZWlNJkB53C0-QfGfVeJx9GOq5gyQm6bYwA&s.jpg">
+        <h3>Grapes</h3>
+        <p>120 Rs./kg</p>
+        <a href="#" class="btn add-to-cart">Add to Cart</a>
+        <div class="quantity-controls" style="display:none;">
+          <button class="minus">−</button>
+          <span class="quantity">1</span>
+          <button class="plus">+</button></div></div>
+      <div class="card">
+        <span class="heart">&#9829;</span>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9x8v5sUJt9qUVVrE8lLwquMV8J0ffXtunLg&s.jpg">
+        <h3>Papaya</h3>
+        <p>50 Rs./kg</p>
+        <a href="#" class="btn add-to-cart">Add to Cart</a>
+        <div class="quantity-controls" style="display:none;">
+          <button class="minus">−</button>
+          <span class="quantity">1</span>
+          <button class="plus">+</button></div></div>
+      <div class="card">
+        <span class="heart">&#9829;</span>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSl1weWnEdMzFMHdNt2b6sukStN3bYLtt_xYw&s.jpg">
+        <h3>Watermelon</h3>
+        <p>40 Rs./kg</p>
+        <a href="#" class="btn add-to-cart">Add to Cart</a>
+        <div class="quantity-controls" style="display:none;">
+          <button class="minus">−</button>
+          <span class="quantity">1</span>
+          <button class="plus">+</button></div></div>
+      <div class="card">
+        <span class="heart">&#9829;</span>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRgsK9-eDGjMBAWKZ-W1vHL72FzJWGQ49nASg&s.jpg">
+        <h3>Strawberries</h3>
+        <p>160 Rs./250g</p>
+        <a href="#" class="btn add-to-cart">Add to Cart</a>
+        <div class="quantity-controls" style="display:none;">
+          <button class="minus">−</button>
+          <span class="quantity">1</span>
+          <button class="plus">+</button></div></div>
+    </div>
+    <br><br><br><br><br>
+
+    <!-- Vegetables Section -->
+    <h2> Vegetables</h2>
+    <div class="grid">
+      <div class="card">
+        <span class="heart">&#9829;</span>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQW7-aAJENmiznbqnQftzp5vCP4GYEiOOFUg&s.jpg">
+        <h3>Onions</h3>
+        <p>53 Rs./kg</p>
+        <a href="#" class="btn add-to-cart">Add to Cart</a>
+        <div class="quantity-controls" style="display:none;">
+          <button class="minus">−</button>
+          <span class="quantity">1</span>
+          <button class="plus">+</button></div></div>
+      <div class="card">
+        <span class="heart">&#9829;</span>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5uhsjDsHoMRQwEgJ5iBUY_nrikb6hXi7zHg&s.jpg">
+        <h3>Potatoes</h3>
+        <p>45 Rs./kg</p> 
+        <a href="#" class="btn add-to-cart">Add to Cart</a>
+        <div class="quantity-controls" style="display:none;">
+          <button class="minus">−</button>
+          <span class="quantity">1</span>
+          <button class="plus">+</button></div></div>
+      <div class="card">
+        <span class="heart">&#9829;</span>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTL-v60vd3FRHbz_X5auGi4vzfthfhUP4Lkgg&s.jpg">
+        <h3>Tomatoes</h3>
+        <p>60 Rs./kg</p>
+        <a href="#" class="btn add-to-cart">Add to Cart</a>
+        <div class="quantity-controls" style="display:none;">
+          <button class="minus">−</button>
+          <span class="quantity">1</span>
+          <button class="plus">+</button></div></div>
+      <div class="card">
+        <span class="heart">&#9829;</span>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRThwdpK3SufSguubRNkk3v9Yp8tbPRzUO3rg&s.jpg">
+        <h3>Carrots</h3>
+        <p>50 Rs./kg</p>
+        <a href="#" class="btn add-to-cart">Add to Cart</a>
+        <div class="quantity-controls" style="display:none;">
+          <button class="minus">−</button>
+          <span class="quantity">1</span>
+          <button class="plus">+</button></div></div>
+      <div class="card">
+        <span class="heart">&#9829;</span>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFeA21qft2CBoZDgxrJG9LVpYbdQPcVq-wPw&s.jpg">
+        <h3>Spinach</h3>
+        <p>30 Rs./bunch</p>
+        <a href="#" class="btn add-to-cart">Add to Cart</a>
+        <div class="quantity-controls" style="display:none;">
+          <button class="minus">−</button>
+          <span class="quantity">1</span>
+          <button class="plus">+</button></div></div>
+      <div class="card">
+        <span class="heart">&#9829;</span>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1nHmlJ9yvJ6zJQxSsvn5sGAhTQvQnehG64g&s.jpg">
+        <h3>Cabbage</h3>
+        <p>40 Rs./kg</p>
+        <a href="#" class="btn add-to-cart">Add to Cart</a>
+        <div class="quantity-controls" style="display:none;">
+          <button class="minus">−</button>
+          <span class="quantity">1</span>
+          <button class="plus">+</button></div></div>
+      <div class="card">
+        <span class="heart">&#9829;</span>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCho_seif4VjuViJmwyebkjhdH6iy0jKaP1w&s.jpg">
+        <h3>Beans</h3>
+        <p>70 Rs./kg</p>
+        <a href="#" class="btn add-to-cart">Add to Cart</a>
+        <div class="quantity-controls" style="display:none;">
+          <button class="minus">−</button>
+          <span class="quantity">1</span>
+          <button class="plus">+</button></div></div>
+      <div class="card">
+        <span class="heart">&#9829;</span>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1pOK0aIIEUGNfulW9NcN2h5JrVL4E7iIRfg&s.jpg">
+        <h3>Capsicum</h3>
+        <p>80 Rs./kg</p>
+        <a href="#" class="btn add-to-cart">Add to Cart</a>
+        <div class="quantity-controls" style="display:none;">
+          <button class="minus">−</button>
+          <span class="quantity">1</span>
+          <button class="plus">+</button></div></div>
+    </div>
+    <br><br><br><br><br>
+
+    <!-- Snacks Section -->
+    <h2> Snacks</h2>
+    <div class="grid">
+      <div class="card">
+        <span class="heart">&#9829;</span>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGWQ5P_loiG30XmSxMBNjfkx1UN1mpXMVsew&s.jpg">
+        <h3>Biscuits</h3>
+        <p>40 Rs./pack</p>
+        <a href="#" class="btn add-to-cart">Add to Cart</a>
+        <div class="quantity-controls" style="display:none;">
+          <button class="minus">−</button>
+          <span class="quantity">1</span>
+          <button class="plus">+</button></div></div>
+      <div class="card">
+        <span class="heart">&#9829;</span>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmbwkRNuvlftgWqJ2D5RwHL7_Q6eZRrvSfZg&s.jpg">
+        <h3>Chips</h3>
+        <p>25 Rs./pack</p>
+        <a href="#" class="btn add-to-cart">Add to Cart</a>
+        <div class="quantity-controls" style="display:none;">
+          <button class="minus">−</button>
+          <span class="quantity">1</span>
+          <button class="plus">+</button></div></div>
+      <div class="card">
+        <span class="heart">&#9829;</span>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3V6IsIuZvz7xiSsh_VyQMf2mH91CLP9fZAg&s.jpg">
+        <h3>Chocolates</h3>
+        <p>100 Rs./bar</p>
+        <a href="#" class="btn add-to-cart">Add to Cart</a>
+        <div class="quantity-controls" style="display:none;">
+          <button class="minus">−</button>
+          <span class="quantity">1</span>
+          <button class="plus">+</button></div></div>
+      <div class="card">
+        <span class="heart">&#9829;</span>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjK4s2zrCLjUT4dDAoiDLkfPXavSZT-n244g&s.jpg">
+        <h3>Popcorn</h3>
+        <p>60 Rs./pack</p>
+        <a href="#" class="btn add-to-cart">Add to Cart</a>
+        <div class="quantity-controls" style="display:none;">
+          <button class="minus">−</button>
+          <span class="quantity">1</span>
+          <button class="plus">+</button></div></div>
+      <div class="card">
+        <span class="heart">&#9829;</span>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRGdvAiDO-cTHXLlf5apek519gvNl-_N3zGA&s.jpg">
+        <h3>Namkeen</h3>
+        <p>55 Rs./pack</p>
+        <a href="#" class="btn add-to-cart">Add to Cart</a>
+        <div class="quantity-controls" style="display:none;">
+          <button class="minus">−</button>
+          <span class="quantity">1</span>
+          <button class="plus">+</button></div></div>
+      <div class="card">
+        <span class="heart">&#9829;</span>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMx-00WQWYUVAlUZLA-fAnr0lHvaKhLcFGqg&s.jpg">
+        <h3>Cookies</h3>
+        <p>90 Rs./pack</p>
+        <a href="#" class="btn add-to-cart">Add to Cart</a>
+        <div class="quantity-controls" style="display:none;">
+          <button class="minus">−</button>
+          <span class="quantity">1</span>
+          <button class="plus">+</button></div></div>
+      <div class="card">
+        <span class="heart">&#9829;</span>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1pq8i--OI8_uwUXFeiHNF9pIG1GE_SSN-HA&s.jpg">
+        <h3>Cake Slice</h3>
+        <p>120 Rs./slice</p>
+        <a href="#" class="btn add-to-cart">Add to Cart</a>
+        <div class="quantity-controls" style="display:none;">
+          <button class="minus">−</button>
+          <span class="quantity">1</span>
+          <button class="plus">+</button></div></div>
+      <div class="card">
+      <span class="heart">&#9829;</span>
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKYcLjEL2FRj8dBMQDw8cq9LTUDpG9HBOrqQ&s.jpg">
+      <h3>Energy Bar</h3>
+      <p>50 Rs./bar</p>
+      <a href="#" class="btn add-to-cart">Add to Cart</a>
+      <div class="quantity-controls" style="display:none;">
+        <button class="minus">−</button>
+        <span class="quantity">1</span>
+        <button class="plus">+</button></div></div>
+    </div>
+    </div>
+    <br><br><br><br><br>
+
+    <!-- Groceries Section -->
+    <h2> Groceries</h2>
+    <div class="grid">
+      <div class="card">
+        <span class="heart">&#9829;</span>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRg4jZhp83QS4oXLLTm_J9nz27Qzyfv9wDFkA&s.jpg">
+        <h3>Rice</h3>
+        <p>60 Rs./kg</p>
+        <a href="#" class="btn add-to-cart">Add to Cart</a>
+        <div class="quantity-controls" style="display:none;">
+          <button class="minus">−</button>
+          <span class="quantity">1</span>
+          <button class="plus">+</button></div></div>
+      <div class="card">
+        <span class="heart">&#9829;</span>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfJzazTIRVKHJrB4VOsplFjQ2TERZFXk6Qlg&s.jpg">
+        <h3>Wheat Flour</h3>
+        <p>55 Rs./kg</p>
+        <a href="#" class="btn add-to-cart">Add to Cart</a>
+        <div class="quantity-controls" style="display:none;">
+          <button class="minus">−</button>
+          <span class="quantity">1</span>
+          <button class="plus">+</button></div></div>
+      <div class="card">
+        <span class="heart">&#9829;</span>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgS8PuDmnH57DT3N7avUDvYMkXWGHSDRqYfg&s.jpg">
+        <h3>Milk</h3>
+        <p>30 Rs./liter</p>
+        <a href="#" class="btn add-to-cart">Add to Cart</a>
+        <div class="quantity-controls" style="display:none;">
+          <button class="minus">−</button>
+          <span class="quantity">1</span>
+          <button class="plus">+</button></div></div>
+      <div class="card">
+        <span class="heart">&#9829;</span>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQD4ucy_ufXX5w4q3ROktRM8W3iUFnsB36sDQ&s.jpg">
+        <h3>Butter</h3>
+        <p>60 Rs./100g</p>
+        <a href="#" class="btn add-to-cart">Add to Cart</a>
+        <div class="quantity-controls" style="display:none;">
+          <button class="minus">−</button>
+          <span class="quantity">1</span>
+          <button class="plus">+</button></div></div>
+      <div class="card">
+        <span class="heart">&#9829;</span>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrDBWASoSUqVG1daQlUHtC3ijnnpFxBBX1xQ&s.jpg">
+        <h3>Sunflower Oil</h3>
+        <p>150 Rs./liter</p>
+        <a href="#" class="btn add-to-cart">Add to Cart</a>
+        <div class="quantity-controls" style="display:none;">
+          <button class="minus">−</button>
+          <span class="quantity">1</span>
+          <button class="plus">+</button></div></div>
+      <div class="card">
+        <span class="heart">&#9829;</span>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1NpN4teZsIds-TdVbTMYmyZC09xJ0HG5apA&s.jpg">
+        <h3>Sugar</h3>
+        <p>45 Rs./kg</p>
+        <a href="#" class="btn add-to-cart">Add to Cart</a>
+        <div class="quantity-controls" style="display:none;">
+          <button class="minus">−</button>
+          <span class="quantity">1</span>
+          <button class="plus">+</button></div></div>
+      <div class="card">
+        <span class="heart">&#9829;</span>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMIrGNj6EKi-JyqnnIiDaMyz5XgJ8bXG449A&s.jpg">
+        <h3>Salt</h3>
+        <p>25 Rs./kg</p>
+        <a href="#" class="btn add-to-cart">Add to Cart</a>
+        <div class="quantity-controls" style="display:none;">
+          <button class="minus">−</button>
+          <span class="quantity">1</span>
+          <button class="plus">+</button></div></div>
+      <div class="card">
+        <span class="heart">&#9829;</span>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNw_6GWDY7ARznCU8f2xOUhlpv7Gejfr1zMQ&s.jpg">
+        <h3>Tea Powder</h3>
+        <p>120 Rs./250g</p>
+        <a href="#" class="btn add-to-cart">Add to Cart</a>
+        <div class="quantity-controls" style="display:none;">
+          <button class="minus">−</button>
+          <span class="quantity">1</span>
+          <button class="plus">+</button></div></div>
+    </div>
+  </div>
+
+ <script>
+  const cart = {};
+
+  function toggleCart() {
+    const modal = document.getElementById("cartModal");
+    modal.style.display = modal.style.display === "block" ? "none" : "block";
+    renderCart();
+  }
+
+  function updateCartDisplay() {
+    // Sum up quantities of all items in cart
+    const count = Object.values(cart).reduce((total, item) => total + item.qty, 0);
+    document.getElementById("cartCount").textContent = count; // display number
+}
+
+  function renderCart() {
+    const cartItemsDiv = document.getElementById("cartItems");
+    cartItemsDiv.innerHTML = "";
+    let total = 0;
+
+    for (const item in cart) {
+      const { price, qty } = cart[item];
+      const itemTotal = price * qty;
+      total += itemTotal;
+
+      cartItemsDiv.innerHTML += `
+        <div class="cart-item">
+          <span>${item} (x${qty})</span>
+          <span>Rs.${itemTotal.toFixed(2)}</span>
+        </div>
+      `;
+    }
+
+    document.getElementById("cartTotal").textContent = total.toFixed(2);
+  }
+
+  document.querySelectorAll(".add-to-cart").forEach(btn => {
+    btn.addEventListener("click", function (e) {
+      e.preventDefault();
+      const card = btn.closest(".card");
+      const name = card.querySelector("h3").textContent;
+      const priceText = card.querySelector("p").textContent;
+      const price = parseFloat(priceText.match(/\d+/)[0]); // extract number only
+
+      if (!cart[name]) {
+        cart[name] = { price: price, qty: 0 };
+      }
+      cart[name].qty++;
+
+      updateCartDisplay();
+      renderCart();
+
+      btn.style.display = "none";
+      card.querySelector(".quantity-controls").style.display = "flex";
+      card.querySelector(".quantity").textContent = cart[name].qty;
+    });
+  });
+
+  document.querySelectorAll(".plus").forEach(btn => {
+    btn.addEventListener("click", function () {
+      const card = btn.closest(".card");
+      const name = card.querySelector("h3").textContent;
+      cart[name].qty++;
+      card.querySelector(".quantity").textContent = cart[name].qty;
+      updateCartDisplay();
+      renderCart();
+    });
+  });
+
+  document.querySelectorAll(".minus").forEach(btn => {
+    btn.addEventListener("click", function () {
+      const card = btn.closest(".card");
+      const name = card.querySelector("h3").textContent;
+
+      if (cart[name].qty > 1) {
+        cart[name].qty--;
+        card.querySelector(".quantity").textContent = cart[name].qty;
+      } else {
+        delete cart[name];
+        card.querySelector(".quantity-controls").style.display = "none";
+        card.querySelector(".add-to-cart").style.display = "inline-block";
+      }
+      updateCartDisplay();
+      renderCart();
+    });
+  });
+
+  // Favorite hearts toggle
+  document.querySelectorAll(".heart").forEach(heart => {
+    heart.addEventListener("click", function () {
+      heart.classList.toggle("active");
+    });
+  });
+</script>
+
+</body>
+</html>

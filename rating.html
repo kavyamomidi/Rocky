@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Star Rating Feedback</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #5757cb;
+      display:flex;
+      justify-content:center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .feedback-box {
+      background: hsl(179, 62%, 41%);
+      padding: 18px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(187, 207, 191, 0.937);
+      text-align: center;
+      width: 350px;
+    }
+
+    .feedback-box h2 {
+      margin-bottom: 15px;
+      color: #333;
+    }
+
+    .stars {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .stars input {
+      display: none;
+    }
+
+    .stars label {
+      font-size: 35px;
+      color: #ccc;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    .stars input:checked ~ label,
+    .stars label:hover,
+    .stars label:hover ~ label {
+      color: gold;
+    }
+
+    button {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px 10px 10px;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: hsl(316, 40%, 45%);
+    }
+    .home-btn {
+  display: inline-block;
+  font-size: 20px;
+  text-decoration: none;
+  color: white;
+  background: #007bff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+.home-btn:hover {
+  background: #0056b3;
+}
+  </style>
+</head>
+<body>
+   <a href="groceries home.html" class="home-btn">🏠</a>
+  <div class="feedback-box">
+    <h1>Rate Our Application</h1>
+    <form>
+      <div class="stars">
+        <input type="radio" id="star5" name="rating" value="5">
+        <label for="star5">★</label>
+        <input type="radio" id="star4" name="rating" value="4">
+        <label for="star4">★</label>
+        <input type="radio" id="star3" name="rating" value="3">
+        <label for="star3">★</label>
+        <input type="radio" id="star2" name="rating" value="2">
+        <label for="star2">★</label>
+        <input type="radio" id="star1" name="rating" value="1">
+        <label for="star1">★</label>
+      </div>
+      <button type="submit">Submit Feedback</button>
+    </form>
+  </div>
+</body>
+</html>

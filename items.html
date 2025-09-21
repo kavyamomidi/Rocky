@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Details of Items</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f5f5f5;
+    }
+
+    h1 {
+      text-align: center;
+      color: #2b2b2b;
+      margin-bottom: 20px;
+    }
+
+    .item-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .item-btn {
+      padding: 10px 18px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: rgb(69, 178, 98);
+      color: white;
+      font-weight: bold;
+      transition: 0.2s;
+    }
+
+    .item-btn:hover {
+      background: rgb(52, 139, 75);
+    }
+
+    /* Modal styles */
+    .item-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      z-index: 1000;
+    }
+
+    .item-modal__dialog {
+      width: min(620px, 95vw);
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 10px 30px rgb(69, 178, 98);
+      overflow: hidden;
+      position: relative;
+      animation: pop 0.22s ease-out;
+    }
+
+    @keyframes pop {
+      from { transform: translateY(8px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .item-modal__bar {
+      background: white;
+      color: black;
+      text-align: center;
+      padding: 25px;
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .item-modal__close {
+      position: absolute;
+      right: 12px;
+      top: 2px;
+      width: 20px;
+      height: 36px;
+      border: none;
+      background: none;
+      color: red;
+      font-size: 35px;
+      cursor: pointer;
+    }
+
+    .item-modal__content {
+      padding: 20px;
+    }
+
+    .item-modal__img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 10px;
+      box-shadow: 0 3px 10px rgb(69, 178, 98);
+    }
+
+    .item-modal__title {
+      margin: 12px 0 4px;
+      font-size: 25px;
+      text-align: center;
+    }
+
+    .item-modal__price {
+      text-align: center;
+      color: rgb(41, 159, 73);
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      margin-top: 8px;
+      margin-bottom: 6px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #2b2b2b;
+    }
+
+    .item-modal__desc {
+      color: #444;
+      line-height: 1.5;
+    }
+
+    .item-modal__nutrition {
+      margin-top: 8px;
+    }
+
+    .item-modal__nutrition ul {
+      padding-left: 18px;
+    }
+
+    .item-modal__nutrition li {
+      margin: 4px 0;
+    }
+    .home-btn {
+  display: inline-block;
+  font-size: 20px;
+  text-decoration: none;
+  color: white;
+  background: #007bff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+.home-btn:hover {
+  background: #0056b3;
+}
+  </style>
+</head>
+<body>
+ <a href="groceries home.html" class="home-btn">🏠</a>
+  <h1>Available Items</h1>
+  <div class="item-list">
+     <div class="category">
+    <h2>Fruits</h2>
+    <div class="items">
+    <button class="item-btn" onclick="showDetails('Apples')">Apples</button>
+    <button class="item-btn" onclick="showDetails('Bananas')">Bananas</button>
+    <button class="item-btn" onclick="showDetails('Mangoes')">Mangoes</button>
+    <button class="item-btn" onclick="showDetails('Oranges')">Oranges</button>
+    <button class="item-btn" onclick="showDetails('Grapes')">Grapes</button>
+    <button class="item-btn" onclick="showDetails('Papaya')">Papaya</button>
+    <button class="item-btn" onclick="showDetails('Water melon')">Watermelon</button>
+    <button class="item-btn" onclick="showDetails('Strawberry')">Strawberries</button><br>
+    
+
+    <div class="category">
+    <h2>Vegetables</h2>
+    <div class="items">
+    <button class="item-btn" onclick="showDetails('Onions')">Onions</button>
+    <button class="item-btn" onclick="showDetails('Tomatoes')">Tomatoes</button>
+    <button class="item-btn" onclick="showDetails('Potatoes')">Potatoes</button>
+    <button class="item-btn" onclick="showDetails('Carrots')">Carrots</button>
+    <button class="item-btn" onclick="showDetails('Spinach')">Spinach</button>
+    <button class="item-btn" onclick="showDetails('Cabbage')">Cabbage</button>
+    <button class="item-btn" onclick="showDetails('Beans')">Beans</button>
+    <button class="item-btn" onclick="showDetails('Capsicum')">Capsicum</button><br>
+
+
+    <div class="category">
+    <h2>Snacks</h2>
+    <div class="items">
+    <button class="item-btn" onclick="showDetails('Biscuits')">Biscuits</button>
+    <button class="item-btn" onclick="showDetails('Chips')">Chips</button>
+    <button class="item-btn" onclick="showDetails('Chocolates')">Chocolates</button>
+    <button class="item-btn" onclick="showDetails('Popcorn')">Popcorn</button>
+    <button class="item-btn" onclick="showDetails('Namkeen')">Namkeen</button>
+    <button class="item-btn" onclick="showDetails('Cookies')">Cookies</button>
+    <button class="item-btn" onclick="showDetails('Cake Slice')">Cake Slice</button> 
+    <button class="item-btn" onclick="showDetails('Energy Bar')">Energy Bar</button>
+
+    <div class="category">
+    <h2>Groceries</h2>
+    <div class="items">
+    <button class="item-btn" onclick="showDetails('Rice')">Rice</button>
+    <button class="item-btn" onclick="showDetails('Wheat Flour')">Wheat flour</button>
+    <button class="item-btn" onclick="showDetails('Milk')">Milk</button>
+    <button class="item-btn" onclick="showDetails('Butter')">Butter</button>
+    <button class="item-btn" onclick="showDetails('Sunflower Oil')">Sunfloweroil</button>
+    <button class="item-btn" onclick="showDetails('Sugar')">Sugar</button>
+    <button class="item-btn" onclick="showDetails('Salt')">Salt</button>
+    <button class="item-btn" onclick="showDetails('Tea Powder')">Teapowder</button><br>
+    
+  </div>
+
+  <!-- Item Details Modal -->
+  <div id="Details" class="item-modal" aria-hidden="true">
+    <div class="item-modal__dialog" role="dialog" aria-modal="true">
+      <div class="item-modal__bar">Item Details</div>
+      <button class="item-modal__close" type="button" aria-label="Close">&times;</button>
+      <div class="item-modal__content">
+        <img id="detailImg" class="item-modal__img" alt="Item image">
+        <h2 id="detailName" class="item-modal__title"></h2>
+        <div id="detailPrice" class="item-modal__price"></div>
+        <div class="section-title">Description</div>
+        <p id="detailDesc" class="item-modal__desc"></p>
+        <div class="section-title">Nutritional Information</div>
+        <div id="detailNutrition" class="item-modal__nutrition">
+          <ul id="detailNutritionList"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Item details
+    const itemInfo = {
+  
+    "Apples": {
+       
+        desc: "Rich in fiber, supports digestion. Contains antioxidants that boost immunity. A healthy, low-calorie snack.",
+        nutrition: [
+            "Calories: 52 kcal (per 100g)",
+            "Fiber: 2.4 g",
+            "Protein: 0.3 g",
+            "Vitamin C: 4.6 mg"
+        ],
+        price: "₹120/kg",
+        image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHXDW9PFwYGQcHZs0rFYYKKF76un14axIhgw&s.jpg"
+    },
+    "Bananas": {
+        desc: "High in potassium, supports heart health and energy levels. Easy to digest and a quick snack.",
+        nutrition: [
+            "Calories: 89 kcal (per 100g)",
+            "Fiber: 2.6 g",
+            "Protein: 1.1 g",
+            "Potassium: 358 mg"
+        ],
+        price: "₹60/dozen",
+        image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3IDOF05TptyUKJEXPh-c4RGMJqf9H9XozuQ&s.jpg"
+    },
+    "Mangoes": {
+        desc: "Rich in vitamin A and C, improves immunity and eye health. Sweet and juicy tropical fruit.",
+        nutrition: [
+            "Calories: 60 kcal (per 100g)",
+            "Fiber: 1.6 g",
+            "Vitamin C: 36 mg",
+            "Vitamin A: 54 µg"
+        ],
+        price: "₹100/kg",
+        image :"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSc7KtEXTfNb1PVNMz7iRboY7w3gPkLqgaFVg&s.jpg"
+    },
+    "Oranges": {
+        desc: "Excellent source of vitamin C, supports skin health and immunity. Refreshing citrus fruit.",
+        nutrition: [
+            "Calories: 47 kcal (per 100g)",
+            "Fiber: 2.4 g",
+            "Vitamin C: 53 mg",
+            "Sugar: 9 g"
+        ],
+        price: "₹80/kg",
+        image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrDMSNv6gwLAJau6LEd0SYo4V7qxYD5pylmw&s.jpg"
+    },
+    "Grapes": {
+        desc: "Rich in antioxidants like resveratrol. Good for heart health and hydration.",
+        nutrition: [
+            "Calories: 69 kcal (per 100g)",
+            "Fiber: 0.9 g",
+            "Vitamin C: 10.8 mg",
+            "Potassium: 191 mg"
+        ],
+        price: "₹90/kg",
+        image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4ZWlNJkB53C0-QfGfVeJx9GOq5gyQm6bYwA&s.jpg"
+    },
+    "Papaya": {
+        desc: "Rich in papain enzyme, aids digestion. High in vitamin C and A for immunity.",
+        nutrition: [
+            "Calories: 43 kcal (per 100g)",
+            "Fiber: 1.7 g",
+            "Vitamin C: 60 mg",
+            "Vitamin A: 950 IU"
+        ],
+        price: "₹45/kg",
+        image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9x8v5sUJt9qUVVrE8lLwquMV8J0ffXtunLg&s.jpg"
+    },
+    "Watermelon": {
+        desc: "Hydrating fruit with high water content. Contains lycopene for heart health.",
+        nutrition: [
+            "Calories: 30 kcal (per 100g)",
+            "Fiber: 0.4 g",
+            "Vitamin C: 8.1 mg",
+            "Water: 92%"
+        ],
+        price: "₹25/kg",
+        image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSl1weWnEdMzFMHdNt2b6sukStN3bYLtt_xYw&s.jpg"
+    },
+    "Strawberry": {
+        desc: "Rich in antioxidants, vitamin C, and manganese. Great for skin and heart health.",
+        nutrition: [
+            "Calories: 32 kcal (per 100g)",
+            "Fiber: 2 g",
+            "Vitamin C: 58.8 mg",
+            "Manganese: 0.4 mg"
+        ],
+        price: "₹200/kg",
+        image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRgsK9-eDGjMBAWKZ-W1vHL72FzJWGQ49nASg&s.jpg"
+    },
+
+    // Vegetables
+    "Onions": {
+        desc: "Adds flavor to dishes. Contains antioxidants and supports heart health.",
+        nutrition: [
+            "Calories: 40 kcal (per 100g)",
+            "Fiber: 1.7 g",
+            "Vitamin C: 7.4 mg",
+            "Sugar: 4.2 g"
+        ],
+        price: "₹40/kg",
+        image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQW7-aAJENmiznbqnQftzp5vCP4GYEiOOFUg&s.jpg"
+    },
+    "Potatoes": {
+        desc: "Rich in carbohydrates for energy. Contains potassium and vitamin C.",
+        nutrition: [
+            "Calories: 77 kcal (per 100g)",
+            "Carbs: 17 g",
+            "Vitamin C: 19.7 mg",
+            "Potassium: 429 mg"
+        ],
+        price: "₹30/kg",
+        image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5uhsjDsHoMRQwEgJ5iBUY_nrikb6hXi7zHg&s.jpg"
+    },
+    "Tomatoes": {
+        desc: "Rich in lycopene, supports heart health and skin. Adds flavor to meals.",
+        nutrition: [
+            "Calories: 18 kcal (per 100g)",
+            "Fiber: 1.2 g",
+            "Vitamin C: 13.7 mg",
+            "Lycopene: 2573 µg"
+        ],
+        price: "₹25/kg",
+        image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTL-v60vd3FRHbz_X5auGi4vzfthfhUP4Lkgg&s.jpg"
+    },
+    "Carrots": {
+        desc: "Excellent source of beta-carotene for eye health. Crunchy and nutritious snack.",
+        nutrition: [
+            "Calories: 41 kcal (per 100g)",
+            "Fiber: 2.8 g",
+            "Vitamin A: 835 µg",
+            "Vitamin C: 5.9 mg"
+        ],
+        price: "₹40/kg",
+        image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStL5RNQUBSIsu4dIr3lpIBVMwFX7I0Gn5H_Q&s"
+    },
+    "Spinach": {
+        desc: "Rich in iron, calcium, and antioxidants. Supports bone health and immunity.",
+        nutrition: [
+            "Calories: 23 kcal (per 100g)",
+            "Iron: 2.7 mg",
+            "Vitamin A: 469 µg",
+            "Vitamin C: 28 mg"
+        ],
+        price: "₹30/bunch",
+        image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFeA21qft2CBoZDgxrJG9LVpYbdQPcVq-wPw&s.jpg"
+    },
+    "Cabbage": {
+        desc: "Low-calorie leafy vegetable. Rich in vitamin C and K, aids digestion.",
+        nutrition: [
+            "Calories: 25 kcal (per 100g)",
+            "Fiber: 2.5 g",
+            "Vitamin C: 36.6 mg",
+            "Vitamin K: 76 µg"
+        ],
+        price: "₹20/kg",
+        image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1nHmlJ9yvJ6zJQxSsvn5sGAhTQvQnehG64g&s.jpg"
+    },
+    "Beans": {
+        desc: "Good source of plant protein and fiber. Supports digestion and heart health.",
+        nutrition: [
+            "Calories: 31 kcal (per 100g)",
+            "Fiber: 3.4 g",
+            "Protein: 1.8 g",
+            "Vitamin C: 16.3 mg"
+        ],
+        price: "₹60/kg",
+        image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCho_seif4VjuViJmwyebkjhdH6iy0jKaP1w&s.jpg"
+    },
+    "Capsicum": {
+        desc: "Rich in vitamin C and antioxidants. Adds crunch and flavor to dishes.",
+        nutrition: [
+            "Calories: 20 kcal (per 100g)",
+            "Vitamin C: 80 mg",
+            "Fiber: 1.7 g",
+            "Vitamin A: 370 µg"
+        ],
+        price: "₹80/kg",
+        image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1pOK0aIIEUGNfulW9NcN2h5JrVL4E7iIRfg&s.jpg"
+    },
+
+    // Snacks
+    "Biscuits": {
+        desc: "Crunchy baked snack, available in sweet and salty varieties.",
+        nutrition: [
+            "Calories: ~450 kcal (per 100g)",
+            "Carbs: 70 g",
+            "Fat: 15 g",
+            "Sugar: 20 g"
+        ],
+        price: "₹30/pack",
+        image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGWQ5P_loiG30XmSxMBNjfkx1UN1mpXMVsew&s.jpg"
+    },
+    "Chips": {
+        desc: "Crispy fried snack made from potatoes or corn. High in salt and fat.",
+        nutrition: [
+            "Calories: ~536 kcal (per 100g)",
+            "Fat: 34 g",
+            "Carbs: 53 g",
+            "Salt: High"
+        ],
+        price: "₹20/pack",
+        image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmbwkRNuvlftgWqJ2D5RwHL7_Q6eZRrvSfZg&s.jpg"
+    },
+    "Chocolates": {
+        desc: "Sweet treat made from cocoa. Rich in antioxidants but high in sugar.",
+        nutrition: [
+            "Calories: ~546 kcal (per 100g)",
+            "Sugar: 48 g",
+            "Fat: 31 g",
+            "Protein: 4.9 g"
+        ],
+        price: "₹100/bar",
+        image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3V6IsIuZvz7xiSsh_VyQMf2mH91CLP9fZAg&s.jpg"
+    },
+    "Popcorn": {
+        desc: "Light, whole-grain snack. Low in calories if air-popped.",
+        nutrition: [
+            "Calories: ~387 kcal (per 100g)",
+            "Fiber: 14 g",
+            "Protein: 13 g",
+            "Fat: 4.5 g"
+        ],
+        price: "₹50/pack",
+        image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjK4s2zrCLjUT4dDAoiDLkfPXavSZT-n244g&s.jpg"
+    },
+    "Namkeen": {
+        desc: "Indian savory snack mix, often spicy and crunchy.",
+        nutrition: [
+            "Calories: ~500 kcal (per 100g)",
+            "Carbs: 60 g",
+            "Fat: 30 g",
+            "Protein: 10 g"
+        ],
+        price: "₹40/pack",
+        image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRGdvAiDO-cTHXLlf5apek519gvNl-_N3zGA&s.jpg"
+    },
+    "Cookies": {
+        desc: "Sweet baked treat, often with chocolate chips or nuts.",
+        nutrition: [
+            "Calories: ~480 kcal (per 100g)",
+            "Sugar: 30 g",
+            "Fat: 22 g",
+            "Protein: 5 g"
+        ],
+        price: "₹60/pack",
+        image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMx-00WQWYUVAlUZLA-fAnr0lHvaKhLcFGqg&s.jpg"
+    },
+    "Cake Slice": {
+        desc: "Soft, sweet dessert. Often made with flour, sugar, butter, and eggs.",
+        nutrition: [
+            "Calories: ~350 kcal (per slice)",
+            "Sugar: 25 g",
+            "Fat: 15 g",
+            "Protein: 4 g"
+        ],
+        price: "₹40/slice",
+        image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1pq8i--OI8_uwUXFeiHNF9pIG1GE_SSN-HA&s.jpg"
+    },
+    "Energy Bar": {
+        desc: "Convenient snack for quick energy. Often rich in carbs, nuts, and protein.",
+        nutrition: [
+            "Calories: ~250 kcal (per bar)",
+            "Protein: 8 g",
+            "Fiber: 3 g",
+            "Sugar: 12 g"
+        ],
+        price: "₹80/bar",
+        image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKYcLjEL2FRj8dBMQDw8cq9LTUDpG9HBOrqQ&s.jpg"
+    },
+
+    // Groceries
+    "Rice": {
+        desc: "Staple grain, rich in carbohydrates. Provides quick energy.",
+        nutrition: [
+            "Calories: 130 kcal (per 100g, cooked)",
+            "Carbs: 28 g",
+            "Protein: 2.7 g",
+            "Fat: 0.3 g"
+        ],
+        price: "₹60/kg",
+        image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRg4jZhp83QS4oXLLTm_J9nz27Qzyfv9wDFkA&s.jpg"
+    },
+    "Wheat Flour": {
+        desc: "Ground wheat, used for making breads and chapatis. Rich in carbs and some protein.",
+        nutrition: [
+            "Calories: 364 kcal (per 100g)",
+            "Carbs: 76 g",
+            "Protein: 10 g",
+            "Fiber: 2.7 g"
+        ],
+        price: "₹45/kg",
+        image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfJzazTIRVKHJrB4VOsplFjQ2TERZFXk6Qlg&s.jpg"
+    },
+    "Milk": {
+        desc: "Rich in calcium and protein. Essential for bone health.",
+        nutrition: [
+            "Calories: 42 kcal (per 100ml)",
+            "Protein: 3.4 g",
+            "Calcium: 125 mg",
+            "Fat: 1 g"
+        ],
+        price: "₹60/litre",
+        image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgS8PuDmnH57DT3N7avUDvYMkXWGHSDRqYfg&s.jpg"
+    },
+    "Butter": {
+        desc: "Made from milk cream. Rich in fat and vitamin A.",
+        nutrition: [
+            "Calories: 717 kcal (per 100g)",
+            "Fat: 81 g",
+            "Vitamin A: 684 µg",
+            "Protein: 0.9 g"
+        ],
+        price: "₹55/100g",
+        image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQD4ucy_ufXX5w4q3ROktRM8W3iUFnsB36sDQ&s.jpg"
+    },
+    "Sunflower Oil": {
+        desc: "Cooking oil rich in vitamin E and healthy fats.",
+        nutrition: [
+            "Calories: 884 kcal (per 100g)",
+            "Fat: 100 g",
+            "Vitamin E: 41 mg",
+            "Saturated Fat: 10 g"
+        ],
+        price: "₹150/litre",
+        image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrDBWASoSUqVG1daQlUHtC3ijnnpFxBBX1xQ&s.jpg"
+    },
+    "Sugar": {
+        desc: "Sweetener, quick source of energy. Should be consumed in moderation.",
+        nutrition: [
+            "Calories: 387 kcal (per 100g)",
+            "Carbs: 100 g",
+            "Sugar: 100 g",
+            "Fat: 0 g"
+        ],
+        price: "₹45/kg",
+        image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1NpN4teZsIds-TdVbTMYmyZC09xJ0HG5apA&s.jpg"
+    },
+    "Salt": {
+        desc: "Essential mineral for body functions. Used in cooking and preservation.",
+        nutrition: [
+            "Calories: 0",
+            "Sodium: 38758 mg (per 100g)",
+            "Fat: 0 g",
+            "Protein: 0 g"
+        ],
+        price: "₹20/kg",
+        image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMIrGNj6EKi-JyqnnIiDaMyz5XgJ8bXG449A&s.jpg"
+    },
+    "Tea Powder": {
+        desc: "Used for making tea. Contains caffeine and antioxidants.",
+        nutrition: [
+            "Calories: 1 kcal (per 100ml brewed)",
+            "Caffeine: 20–60 mg",
+            "Antioxidants: High",
+            "Fat: 0 g"
+        ],
+        price: "₹500/kg",
+        image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNw_6GWDY7ARznCU8f2xOUhlpv7Gejfr1zMQ&s.jpg"
+    }
+};
+
+    const modal = document.getElementById("Details");
+    const closeBtn = document.querySelector(".item-modal__close");
+
+    // Show details
+    function showDetails(item) {
+      const details = itemInfo[item];
+      if (!details) return;
+
+      document.getElementById("detailImg").src = details.image;
+      document.getElementById("detailName").innerText = item;
+      document.getElementById("detailPrice").innerText = details.price;
+      document.getElementById("detailDesc").innerText = details.desc;
+
+      const nutritionList = document.getElementById("detailNutritionList");
+      nutritionList.innerHTML = "";
+      details.nutrition.forEach(n => {
+        const li = document.createElement("li");
+        li.innerText = n;
+        nutritionList.appendChild(li);
+      });
+
+      modal.style.display = "flex";
+    }
+
+    // Close modal
+    closeBtn.addEventListener("click", () => {
+      modal.style.display = "none";
+    });
+
+    // Close modal on outside click
+    window.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        modal.style.display = "none";
+      }
+    });
+  </script>
+</body>
+</html>

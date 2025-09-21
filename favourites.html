@@ -1,0 +1,153 @@
+<!-- Favourites Heart Icon with Badge -->
+<div class="fav-icon" onclick="toggleFav()"> My Favorites ❤️ <span id="favCount">0</span></div>
+<a href="groceries home.html" class="home-btn">🏠</a>
+
+<!-- Favourites Modal -->
+<div id="favModal" style="display:none; position:fixed; right:0; top:0; width:400px; height:100%; background:#fff; padding:20px; overflow-y:auto; box-shadow:-2px 0 8px rgba(0,0,0,0.2); z-index:1000;">
+  <button onclick="toggleFav()" style="float:right;background:red;color:#fff;border:none;padding:5px 10px;cursor:pointer;">X</button>
+  <h2>Your Favourites</h2>
+  <div id="favItems"></div>
+</div>
+
+<script>
+ // Favorites functionality
+        const favoritesList = document.getElementById("favoritesList");
+        let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+
+        // Filter out invalid entries
+        favorites = favorites.filter(item => 
+            item && 
+            typeof item.name === "string" && item.name.trim() !== "" &&
+            typeof item.price === "string" && item.price.trim() !== "" &&
+            typeof item.img === "string" && item.img.trim() !== ""
+        );
+
+        localStorage.setItem("favorites", JSON.stringify(favorites));
+
+        function updateFavoritesList() {
+            favoritesList.innerHTML = "";
+            if (favorites.length === 0) {
+                const li = document.createElement("li");
+                li.textContent = "No favorites added yet.";
+                li.style.background = "none";
+                li.style.color = "#666";
+                favoritesList.appendChild(li);
+                return;
+            }
+
+            favorites.forEach(item => {
+                if (item.name && item.price && item.img) {
+                    const li = document.createElement("li");
+                    li.innerHTML = `
+                        <img src="${item.img}" alt="${item.name}">
+                        <strong>${item.name}</strong> - ${item.price}
+                    `;
+                    favoritesList.appendChild(li);
+                }
+            });
+        }
+
+        document.querySelectorAll(".favorite-icon").forEach(icon => {
+            const name = icon.dataset.name;
+            if (favorites.some(item => item.name === name)) {
+                icon.classList.remove("far");
+                icon.classList.add("fas", "favorited");
+            }
+
+            icon.addEventListener("click", (e) => {
+                e.stopPropagation();
+                const card = icon.closest(".card");
+                const name = icon.dataset.name;
+                const price = card.querySelector(".price").textContent;
+                const img = card.querySelector("img").src;
+
+                if (name && price && img) {
+                    const index = favorites.findIndex(item => item.name === name);
+                    if (index === -1) {
+                        favorites.push({ name, price, img });
+                        icon.classList.remove("far");
+                        icon.classList.add("fas", "favorited");
+                    } else {
+                        favorites.splice(index, 1);
+                        icon.classList.remove("fas", "favorited");
+                        icon.classList.add("far");
+                    }
+
+                    localStorage.setItem("favorites", JSON.stringify(favorites));
+                    updateFavoritesList();
+                }
+            });
+        });
+
+        // Initialize favorites list on page load
+        updateFavoritesList();
+</script>
+
+<style>
+  .favorite-icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            cursor: pointer;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .favorite-icon.far { /* Outline heart (default) */
+            -webkit-text-fill-color: transparent;
+            -webkit-text-stroke: 1px red;
+        }
+
+        .favorite-icon:hover {
+            transform: scale(1.2);
+            -webkit-text-fill-color: red; /* Solid red on hover */
+            -webkit-text-stroke: 0;
+        }
+
+        .favorite-icon.favorited {
+            -webkit-text-fill-color: red; /* Solid red when favorited */
+            -webkit-text-stroke: 0;
+        }
+
+        /* Favorites Section */
+        #favorites {
+            margin-top: 40px;
+        }
+
+        #favoritesList {
+            list-style: none;
+            padding: 0;
+            max-width: 500px;
+            margin: auto;
+        }
+
+        #favoritesList li {
+            background: #f4f4f4;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #favoritesList img {
+            width: 40px;
+            height: 40px;
+            border-radius: 5px;
+            object-fit: cover;
+        }
+        .home-btn {
+  display: inline-block;
+  font-size: 20px;
+  text-decoration: none;
+  color: white;
+  background: #007bff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+.home-btn:hover {
+  background: #0056b3;
+}
+</style>
